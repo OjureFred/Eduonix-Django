@@ -33,3 +33,4 @@ class CreateNewPost(LoginRequiredMixin, CreateView):
         obj.author = self.request.user
         obj.save()
         return super().form_valid(form)
+    
