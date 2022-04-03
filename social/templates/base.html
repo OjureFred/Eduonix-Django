@@ -82,6 +82,45 @@
 
 </div>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" 
+integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<script>
+  $.ajaxSetup({
+    beforeSend: function beforeSend(xhr, settings) {
+      function getCookie(name){
+        let cookie = null;
+      
+        if(document.cookie && document.cookie !== ' '){
+          const cookies = document.cookie.split(';');
+
+          for(let i = 0; i < cookies.length; i++) {
+            const cookies = jquery.trim(cookies[i]) 
+
+            //does this cookie string begin with a name we want?
+            if(cookie.substring(0, name.length + 1) == ('${name}=')) {
+              cookieValue = decodeURIComponent(cookie.substring (
+                name.length +1
+              ));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+          
+      }
+      if(!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+        //only send the token to relative urls ie locally
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+      }
+    },
+  })
+</script>
+
+
 <script src="{% static 'js/main.js' %}" ></script>
 </body>
 </html>
