@@ -4,6 +4,6 @@ from . import views
 
 app_name="profiles"
 
-urlspatterns = [
-    path("profile/<str:usernamr>/", views.ProfileDetailView.as_view(), name="detail"),
+urlpatterns = [
+    path("profile/<str:username>/", views.ProfileDetailView.as_view(), name="detail"),
 ]

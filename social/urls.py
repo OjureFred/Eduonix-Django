@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from feeds import urls as feeds_urls
-from profiles import urls as profiles_url
+from profiles import urls as profiles_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
