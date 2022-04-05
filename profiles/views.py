@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.forms import SlugField
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render
 
@@ -20,3 +21,6 @@ class ProfileDetailView(DetailView):
         context['total_posts'] = Post.objects.filter(author = user).count()
 
         return context
+
+class FollowView(LoginRequiredMixin, View):
+    pass
