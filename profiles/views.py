@@ -1,11 +1,13 @@
 from django.contrib.auth.models import User
 from django.forms import SlugField
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.generic import DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render
 
 from feeds.models import Post
+from followers.models import Follower
 
 class ProfileDetailView(DetailView):
     http_method_names = ["get"]
@@ -23,4 +25,41 @@ class ProfileDetailView(DetailView):
         return context
 
 class FollowView(LoginRequiredMixin, View):
-    pass
+    http_method_names = ["post"]
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST.dict()
+
+        if "action" not in data or "username" not in data:
+            return HttpResponseBadRequest("Missing data")
+        
+        try:
+            other_user = User.objects.get(username = data["username"])
+        except User.DoesNotExist:
+            return HttpResponseBadRequest("Missing user")
+        
+        if data["action"] == "follow":
+            #follow
+            follower, created = Follower.objects.get_or_create(
+                followed_by = request.user,
+                following = other_user
+            )
+        
+        else:
+            #unfollow
+            try:
+                follower = Follower.objects.get(
+                    followed_by = request.user,
+                    following = other_user
+                )
+            
+            except Follower.DoesNotExist:
+                follower = None
+            
+            if follower:
+                follower.delete()
+
+        return JsonResponse({
+            'success': True,
+            "wording": "Unfollow" if data['action'] == "follow" else "Follow"
+        })
