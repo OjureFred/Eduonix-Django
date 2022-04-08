@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'feeds',
     'profiles',
     'sorl.thumbnail',
-    'followers'
+    'followers',
     'comments',
 ]
 

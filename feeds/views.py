@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Post
 from followers.models import Follower
+from comments.models import Comment
 
 class HomePage(TemplateView):
     http_method_names = ['get']
@@ -20,7 +21,11 @@ class HomePage(TemplateView):
 
         if self.request.user.is_authenticated:
             following = list(Follower.objects.filter(followed_by = self.request.user).values_list('following', flat=True))
-            posts = Post.objects.filter(user_in = following).order_by('-id')[0:30]
+            if not following:
+                posts = Post.objects.all().order_by('-id')[0:30]
+            else:
+                posts = Post.objects.filter(author__in = following).order_by('-id')[0:30]
+           
         else:
             posts = Post.objects.all().order_by('-id')[0:30]
         
@@ -33,6 +38,7 @@ class PostDetailView(DetailView):
     model = Post
     context_object_name = 'post'
 
+    
 class CreateNewPost(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'feeds/create.html'
@@ -48,4 +54,21 @@ class CreateNewPost(LoginRequiredMixin, CreateView):
         obj.author = self.request.user
         obj.save()
         return super().form_valid(form)
+    
+    def post(self, request, *args, **kwargs):
+
+        post = Post.objects.create(
+            text=request.POST.get("text"),
+            author=request.user,
+        )
+
+        return render(
+            request,
+            "includes/post.html",
+            {
+                "post": post,
+                "show_detail_link": True,
+            },
+            content_type="application/html"
+        )
     

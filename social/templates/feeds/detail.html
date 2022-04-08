@@ -4,4 +4,8 @@
 
 {% block body %}
     {% include "includes/post.html" with post=post %}
+    <hr>
+    {%for comment in comments %}
+      {{comment.text }}
+    {% endfor %}
 {% endblock body %}
