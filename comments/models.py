@@ -9,5 +9,8 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.DO_NOTHING)
 
+    class Meta:
+        ordering = ('-date',)
+
     def __str__(self):
-        return self.text
+        return 'Comment by {}'.format(self.author)

@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
 from followers.models import Follower
 from comments.models import Comment
+from comments.forms import CommentForm
 
 class HomePage(TemplateView):
     http_method_names = ['get']
@@ -36,7 +37,21 @@ class PostDetailView(DetailView):
     http_method_names = ['get']
     template_name = 'feeds/detail.html'
     model = Post
-    context_object_name = 'post'
+    #context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        #slug = self.kwargs["slug"]
+
+        form = CommentForm()
+        post = Post.objects.get(pk=pk)
+        comments = post.comment_set.all()
+
+        context['post'] = post
+        context['comments'] = comments
+        context['form'] = form
+        return context
 
     
 class CreateNewPost(LoginRequiredMixin, CreateView):
