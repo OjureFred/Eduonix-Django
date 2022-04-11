@@ -52,6 +52,28 @@ class PostDetailView(DetailView):
         context['comments'] = comments
         context['form'] = form
         return context
+    
+    def form_valid(self, form):
+        obj = form.save(commit = False)
+        obj.author = self.request.user
+        obj.post = self.request.post
+        obj.save()
+        return super().form_valid(form)
+    
+    def post(self, request, *args, **kwargs):
+        comment = Comment.objects.create(
+            text = request.POST.get.text,
+            author = request.user,
+            post = request.POST.get.post,
+        )
+
+        return render(request, 'feeds/detail.html', 
+        {
+            'post': post,
+            'comments': comments,
+            'form': form
+        }
+         )
 
     
 class CreateNewPost(LoginRequiredMixin, CreateView):
