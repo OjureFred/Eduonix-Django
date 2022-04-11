@@ -33,11 +33,15 @@ class HomePage(TemplateView):
         context['posts'] = posts
         return context
     
-class PostDetailView(DetailView):
+class PostDetailView(TemplateView):
     http_method_names = ['get']
     template_name = 'feeds/detail.html'
     model = Post
     success_url = 'feeds/detail.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        return super().dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
@@ -66,8 +70,9 @@ class PostDetailView(DetailView):
             author = request.user,
             post = request.POST.get.post,
         )
+        print(request.POST)
 
-        return render(request, 'feeds/detail.html', 
+        return render(request, '/', 
         {
             'post': post,
             'comments': comments,

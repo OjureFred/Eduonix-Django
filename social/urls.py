@@ -26,5 +26,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include(feeds_urls, namespace='feeds')),
     path("", include(profiles_urls, namespace="profiles")),
+    path("", include(socialapi_urls, namespace = "socialapi" )),
     re_path("", include("allauth.urls"))
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

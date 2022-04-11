@@ -27,7 +27,7 @@
 <!--  Form to enter comments -->
 
 <h3>Leave a comment </h3>
-<form method="POST" action = ".">
+<form method="POST" action = "{% url 'feeds:detail' post.id %}">
   {% csrf_token %}
   {{ form.as_p }}
   <div>
