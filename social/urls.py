@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 from feeds import urls as feeds_urls
 from profiles import urls as profiles_urls
+from socialapi import urls as socialapi_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
