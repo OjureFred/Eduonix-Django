@@ -34,7 +34,7 @@ class HomePage(TemplateView):
         return context
     
 class PostDetailView(TemplateView):
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
     template_name = 'feeds/detail.html'
     model = Post
     success_url = 'feeds/detail.html'
@@ -62,21 +62,27 @@ class PostDetailView(TemplateView):
         obj.author = self.request.user
         obj.post = self.request.post
         obj.save()
+        print(obj.post)
         return super().form_valid(form)
     
     def post(self, request, *args, **kwargs):
-        comment = Comment.objects.create(
-            text = request.POST.get.text,
-            author = request.user,
-            post = request.POST.get.post,
-        )
-        print(request.POST)
+        
+        print(request.POST.items)
+        post1 = Post.objects.get(pk = request.POST.get('post'))
 
-        return render(request, '/', 
+        comment = Comment.objects.create(
+            text = request.POST.get("text"),
+            author = request.user,
+            #post = request.POST.get('post'),
+            post = post1
+        )
+        
+        
+
+        return render(request, 'feeds/homepage.html', 
         {
-            'post': post,
-            'comments': comments,
-            'form': form
+            'posts': Post.objects.all().order_by('-id')[0:30]
+            
         }
          )
 
