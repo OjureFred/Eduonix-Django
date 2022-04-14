@@ -21,3 +21,4 @@ class PostCreateViewTest(TestCase):
         self.client.post(reverse('feeds:new_post'), feed_test)
 
         self.assertTrue(Post.objects.filter(author= user1).exists)
+
