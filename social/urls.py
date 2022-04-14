@@ -38,5 +38,5 @@ urlpatterns = [
     path("", include(socialapi_urls, namespace = "socialapi" )),
     path("", include(router.urls)),
     path("api-auth/", include('rest_framework.urls', namespace = "rest_framework")),
-    re_path("", include("allauth.urls")),
+    #re_path("", include("allauth.urls")),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

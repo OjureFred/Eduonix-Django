@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import permissions
 
@@ -20,7 +19,7 @@ class CommentsViewSet(viewsets.ModelViewSet):
     API endpoint to allow Comments to be viewed and edited
     '''
 
-    queryset = Comment.objects.all().order_by('post')
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
